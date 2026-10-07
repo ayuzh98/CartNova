@@ -1,4 +1,12 @@
-# CartNova
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=800&size=55&duration=2500&pause=1000&color=00D9FF&center=true&vCenter=true&width=900&height=100&lines=CARTNOVA;CARTNOVA+%F0%9F%9B%92;WELCOME+TO+CARTNOVA" alt="CARTNOVA Animation" />
+
+<br>
+
+<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=600&size=20&duration=3000&pause=800&color=FFFFFF&center=true&vCenter=true&width=700&height=50&lines=Shop+Smart.+Live+Better.;Your+Modern+E-Commerce+Experience;Discover.+Shop.+Enjoy." alt="CartNova Tagline" />
+
+</div>
 # 🛒 CartNova
 
 CartNova is a modern e-commerce website developed as a college project.
