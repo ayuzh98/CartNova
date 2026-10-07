@@ -5,16 +5,8 @@
 <br>
 
 <img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=600&size=20&duration=3000&pause=800&color=FFFFFF&center=true&vCenter=true&width=700&height=50&lines=Shop+Smart.+Live+Better.;Your+Modern+E-Commerce+Experience;Discover.+Shop.+Enjoy." alt="CartNova Tagline" />
-
 </div>
 <img width="2172" height="724" alt="CARTNOVA Neon Script Glow" src="https://github.com/user-attachments/assets/9900c423-b101-47bb-8790-658f9441bca3" />
-
-
-CartNova is a modern e-commerce website developed as a college project.
-<div align="center">
-
-# 🛒 CartNova
-
 ### 🛍️ Shop Smart. Live Better.
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=24&pause=1000&color=36BCF7&center=true&vCenter=true&width=600&lines=Welcome+to+CartNova+%F0%9F%9B%92;A+Modern+E-Commerce+Website;Shop+Smart.+Live+Better.;Built+with+HTML%2C+CSS+%26+JavaScript+%F0%9F%92%BB" alt="Typing Animation" />
