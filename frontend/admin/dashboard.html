@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — CartNova</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" data-admin-sidebar></aside>
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1>Dashboard</h1>
+        <a class="btn btn-outline btn-sm" href="../index.html">View Store</a>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card"><p>Total Users</p><h2 id="statUsers">0</h2></article>
+        <article class="stat-card"><p>Total Products</p><h2 id="statProducts">0</h2></article>
+        <article class="stat-card"><p>Total Orders</p><h2 id="statOrders">0</h2></article>
+        <article class="stat-card"><p>Total Revenue</p><h2 id="statRevenue">₹0</h2></article>
+        <article class="stat-card"><p>Pending Orders</p><h2 id="statPending">0</h2></article>
+        <article class="stat-card"><p>Low Stock Products</p><h2 id="statLowStock">0</h2></article>
+      </div>
+
+      <section class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Low Stock Product</th>
+              <th>Stock</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody id="lowStockBody"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => Admin.initDashboard());
+  </script>
+</body>
+</html>

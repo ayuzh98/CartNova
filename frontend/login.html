@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — CartNova</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div data-navbar></div>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <p>Sign in to access your cart, wishlist, and orders.</p>
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" required />
+          <div class="form-error">Valid email is required</div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••••" required />
+          <div class="form-error">Password is required</div>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Login</button>
+      </form>
+      <p class="auth-footer">
+        New to CartNova? <a href="register.html">Create an account</a>
+      </p>
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--muted);background:#f8fafc;border-radius:10px;padding:0.8rem">
+        Demo: <strong>user@cartnova.local</strong> / <strong>User@123</strong><br />
+        Admin: <strong>admin@cartnova.local</strong> / <strong>Admin@123</strong>
+      </p>
+    </div>
+  </main>
+
+  <div data-footer></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/profile.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.mountChrome({ active: "login" });
+      AuthPages.initLogin();
+    });
+  </script>
+</body>
+</html>

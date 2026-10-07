@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CartNova — Shop Smart. Live Better.</title>
+  <meta name="description" content="CartNova is a modern online shopping platform. Shop electronics, fashion, home, books, beauty and sports." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div data-navbar></div>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="brand-eyebrow"><span class="logo-mark" style="width:28px;height:28px;font-size:0.75rem">CN</span> CartNova</div>
+      <h1>Shop Smart. Live Better.</h1>
+      <p>Discover curated essentials across electronics, fashion, home, books, beauty, and sports — with secure checkout and student-friendly prices.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="products.html">Shop Now</a>
+        <a class="btn btn-outline" href="products.html?sort=rating">Explore Top Rated</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="categories">
+    <div class="container">
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">Find what you need faster with curated collections.</p>
+      <div class="category-grid" id="categoryGrid"></div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Featured Products</h2>
+      <p class="section-subtitle">Handpicked favorites for everyday upgrades.</p>
+      <div class="product-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Trending Now</h2>
+      <p class="section-subtitle">What CartNova shoppers are loving this week.</p>
+      <div class="product-grid" id="trendingGrid"></div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Special Offers</h2>
+      <p class="section-subtitle">Limited-time deals designed for smart spending.</p>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <span class="offer-badge">SAVE 20%</span>
+          <h3>Electronics Week</h3>
+          <p>Wireless audio, wearables, and productivity gear at student-ready prices.</p>
+          <a class="btn btn-outline" href="products.html?category=1" style="margin-top:1rem;border-color:#fff;color:#fff">Shop Electronics</a>
+        </article>
+        <article class="feature-card" style="background:linear-gradient(160deg,#5b21b6,#7c3aed)">
+          <span class="offer-badge">FREE DELIVERY</span>
+          <h3>Orders above ₹999</h3>
+          <p>No delivery fee on eligible carts. Fast dispatch across major cities.</p>
+          <a class="btn btn-outline" href="products.html" style="margin-top:1rem;border-color:#fff;color:#fff">Browse Deals</a>
+        </article>
+        <article class="feature-card" style="background:linear-gradient(160deg,#0f766e,#14b8a6)">
+          <span class="offer-badge">NEW ARRIVALS</span>
+          <h3>Home & Living</h3>
+          <p>Refresh your space with comfort-first essentials and clean design picks.</p>
+          <a class="btn btn-outline" href="products.html?category=3" style="margin-top:1rem;border-color:#fff;color:#fff">Shop Home</a>
+        </article>
+        <article class="feature-card" style="background:linear-gradient(160deg,#9a3412,#ea580c)">
+          <span class="offer-badge">BUNDLE & SAVE</span>
+          <h3>Beauty Essentials</h3>
+          <p>Glow-ready kits with transparent pricing and easy returns.</p>
+          <a class="btn btn-outline" href="products.html?category=5" style="margin-top:1rem;border-color:#fff;color:#fff">Shop Beauty</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Why Choose CartNova</h2>
+      <p class="section-subtitle">Built for trust, speed, and everyday convenience.</p>
+      <div class="why-grid">
+        <article class="why-card">
+          <div class="why-icon">🔒</div>
+          <h3>Secure Payment</h3>
+          <p>Protected checkout flows with no card storage in this demo storefront.</p>
+        </article>
+        <article class="why-card">
+          <div class="why-icon">⚡</div>
+          <h3>Fast Delivery</h3>
+          <p>Reliable dispatch windows so your essentials arrive when you need them.</p>
+        </article>
+        <article class="why-card">
+          <div class="why-icon">↺</div>
+          <h3>Easy Returns</h3>
+          <p>Hassle-free returns policy designed around customer confidence.</p>
+        </article>
+        <article class="why-card">
+          <div class="why-icon">💬</div>
+          <h3>24/7 Support</h3>
+          <p>Friendly help whenever you need product guidance or order support.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Customer Reviews</h2>
+      <p class="section-subtitle">Real feedback from CartNova shoppers.</p>
+      <div class="reviews-grid" id="reviewsGrid"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="newsletter">
+        <div>
+          <h2>Stay in the loop</h2>
+          <p>Get deal drops, new arrivals, and CartNova updates in your inbox.</p>
+        </div>
+        <form class="newsletter-form" id="newsletterForm">
+          <input id="newsletterEmail" type="email" placeholder="Enter your email" required />
+          <button class="btn btn-secondary" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div data-footer></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/products.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.mountChrome({ active: "home" });
+      HomePage.init();
+    });
+  </script>
+</body>
+</html>

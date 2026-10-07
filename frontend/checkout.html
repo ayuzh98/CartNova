@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — CartNova</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+  <div data-navbar></div>
+
+  <main class="container">
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> /
+        <a href="cart.html">Cart</a> /
+        <span>Checkout</span>
+      </div>
+      <h1>Checkout</h1>
+      <div class="checkout-steps">
+        <span class="step-chip active">1. Address</span>
+        <span class="step-chip active">2. Summary</span>
+        <span class="step-chip active">3. Payment</span>
+        <span class="step-chip">4. Place Order</span>
+      </div>
+    </div>
+
+    <form id="checkoutForm" class="layout-2col">
+      <div>
+        <section class="panel" style="margin-bottom:1rem">
+          <h2>Delivery Address</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input id="fullName" required />
+              <div class="form-error">Required</div>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input id="phone" required />
+              <div class="form-error">Required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="street">Street Address</label>
+            <input id="street" required />
+            <div class="form-error">Required</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City</label>
+              <input id="city" required />
+              <div class="form-error">Required</div>
+            </div>
+            <div class="form-group">
+              <label for="state">State</label>
+              <input id="state" required />
+              <div class="form-error">Required</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postalCode">Postal Code</label>
+              <input id="postalCode" required />
+              <div class="form-error">Required</div>
+            </div>
+            <div class="form-group">
+              <label for="country">Country</label>
+              <input id="country" value="India" required />
+              <div class="form-error">Required</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Payment Method</h2>
+          <div class="payment-options">
+            <label class="payment-option">
+              <input type="radio" name="paymentMethod" value="COD" checked />
+              <div>
+                <strong>Cash on Delivery</strong>
+                <div style="color:var(--muted);font-size:0.9rem">Pay when your order arrives.</div>
+              </div>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="paymentMethod" value="ONLINE" />
+              <div>
+                <strong>Online Payment (Placeholder)</strong>
+                <div style="color:var(--muted);font-size:0.9rem">Demo only — no card numbers or CVV are collected.</div>
+              </div>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <aside class="panel">
+        <h3>Order Summary</h3>
+        <div id="checkoutItems"></div>
+        <div class="summary-row" style="margin-top:1rem"><span>Subtotal</span><span id="sumSubtotal">₹0</span></div>
+        <div class="summary-row"><span>Discount</span><span id="sumDiscount">- ₹0</span></div>
+        <div class="summary-row"><span>Delivery</span><span id="sumDelivery">₹0</span></div>
+        <div class="summary-row total"><span>Total</span><span id="sumTotal">₹0</span></div>
+        <button class="btn btn-primary btn-block" type="submit" style="margin-top:1rem">Place Order</button>
+        <a class="btn btn-ghost btn-block" href="cart.html" style="margin-top:0.5rem">Back to Cart</a>
+      </aside>
+    </form>
+  </main>
+
+  <div data-footer></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/checkout.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.mountChrome({ active: "" });
+      CheckoutPage.init();
+    });
+  </script>
+</body>
+</html>
