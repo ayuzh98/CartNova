@@ -244,25 +244,25 @@ Cart_Nova/
 └── backend/
     └── Coming Soon
 
-##🔄 User Flow
-              🏠 HOME
-                 │
-                 ▼
-          🛍️ PRODUCTS
-                 │
-                 ▼
-         📦 PRODUCT DETAILS
-                 │
-          ┌──────┴──────┐
-          │             │
-          ▼             ▼
-      ❤️ WISHLIST    🛒 CART
-                        │
-                        ▼
-                    💳 CHECKOUT
-                        │
-                        ▼
-                  📋 ORDER PLACED
-                        │
-                        ▼
-                    👤 PROFILE
+# 🔄 User Shopping Flow
+          🏠 HOME
+             │
+             ▼
+      🛍️ PRODUCTS
+             │
+             ▼
+     📦 PRODUCT DETAILS
+             │
+      ┌──────┴──────┐
+      │             │
+      ▼             ▼
+  ❤️ WISHLIST    🛒 CART
+                    │
+                    ▼
+                💳 CHECKOUT
+                    │
+                    ▼
+              📋 ORDER PLACED
+                    │
+                    ▼
+                👤 PROFILE
