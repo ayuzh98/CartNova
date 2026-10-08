@@ -1,5 +1,5 @@
 /**
- * Checkout flow (Phase 1 mock order creation).
+ * Legacy local checkout helpers.
  */
 const CheckoutPage = {
   init() {
@@ -53,6 +53,10 @@ const CheckoutPage = {
 
     document.getElementById("sumSubtotal").textContent = formatINR(totals.subtotal);
     document.getElementById("sumDiscount").textContent = `- ${formatINR(totals.discount)}`;
+    document.getElementById("sumGst").textContent = formatINR(totals.gst);
+    const couponRow = document.getElementById("sumCouponRow");
+    if (couponRow) couponRow.hidden = !totals.coupon;
+    if (totals.coupon) document.getElementById("sumCoupon").textContent = `- ${formatINR(totals.couponDiscount)} (${totals.coupon})`;
     document.getElementById("sumDelivery").textContent =
       totals.deliveryFee === 0 ? "FREE" : formatINR(totals.deliveryFee);
     document.getElementById("sumTotal").textContent = formatINR(totals.total);
@@ -118,7 +122,9 @@ const CheckoutPage = {
       paymentStatus: paymentMethod === "COD" ? "PENDING" : "PAID",
       paymentMethod,
       totalAmount: totals.total,
-      discount: totals.discount,
+      discount: totals.discount + totals.couponDiscount,
+      coupon: totals.coupon || null,
+      gstIncluded: totals.gst,
       deliveryFee: totals.deliveryFee,
       address: {
         fullName: document.getElementById("fullName").value.trim(),
@@ -171,13 +177,8 @@ const CartPage = {
     const totals = Cart.getTotals();
 
     if (!items.length) {
-      root.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">🛒</div>
-          <h2>Your cart is empty</h2>
-          <p>Looks like you haven't added anything yet. Explore products and start shopping.</p>
-          <a class="btn btn-primary" href="products.html">Shop Now</a>
-        </div>`;
+      root.innerHTML = UI.emptyState({ icon: "bag", title: "Your cart is empty", description: "Start shopping to add products to your cart.", action: "Shop Now" }) + '<div id="savedForLaterItems"></div>';
+      if (typeof Features !== "undefined") Features.renderSavedItems();
       return;
     }
 
@@ -190,19 +191,21 @@ const CartPage = {
               .map(
                 (item) => `
               <div class="cart-item" data-id="${item.productId}">
-                <img src="${item.product.image}" alt="${item.product.name}" />
+                <img src="${UI.escapeHTML(item.product.image)}" alt="${UI.escapeHTML(item.product.name)}" width="96" height="120" loading="lazy" decoding="async" />
                 <div class="cart-item-info">
-                  <h3><a href="product-details.html?id=${item.productId}">${item.product.name}</a></h3>
+                  <h3><a href="product-details.html?id=${item.productId}">${UI.escapeHTML(item.product.name)}</a></h3>
                   <p>${formatINR(item.unitPrice)} each</p>
+                  ${item.variants && Object.values(item.variants).some(Boolean) ? `<p class="cart-variants">${Object.entries(item.variants).filter(([,value])=>value).map(([key,value])=>`${UI.escapeHTML(key)}: ${UI.escapeHTML(value)}`).join(" · ")}</p>` : ""}
                   <div class="qty-control">
-                    <button data-dec="${item.productId}">−</button>
+                    <button type="button" aria-label="Decrease quantity" data-dec="${item.productId}" data-cart-variant='${UI.escapeHTML(JSON.stringify(item.variants||{}))}'>−</button>
                     <span>${item.quantity}</span>
-                    <button data-inc="${item.productId}">+</button>
+                    <button type="button" aria-label="Increase quantity" data-inc="${item.productId}" data-cart-variant='${UI.escapeHTML(JSON.stringify(item.variants||{}))}'>+</button>
                   </div>
                 </div>
                 <div class="cart-item-side">
                   <strong>${formatINR(item.lineTotal)}</strong>
-                  <button class="btn btn-ghost btn-sm" data-remove="${item.productId}">Remove</button>
+                  <button type="button" class="btn btn-ghost btn-sm" data-save-for-later="${item.productId}" data-cart-variant='${UI.escapeHTML(JSON.stringify(item.variants||{}))}'>Save for later</button>
+                  <button type="button" class="btn btn-ghost btn-sm" data-remove="${item.productId}" data-cart-variant='${UI.escapeHTML(JSON.stringify(item.variants||{}))}'>Remove</button>
                 </div>
               </div>`
               )
@@ -213,19 +216,32 @@ const CartPage = {
           <h3>Order Summary</h3>
           <div class="summary-row"><span>Subtotal</span><span>${formatINR(totals.subtotal)}</span></div>
           <div class="summary-row"><span>Discount</span><span>- ${formatINR(totals.discount)}</span></div>
+          ${totals.coupon ? `<div class="summary-row"><span>Coupon (${totals.coupon})</span><span>- ${formatINR(totals.couponDiscount)}</span></div>` : ""}
+          <div class="summary-row"><span>GST (included)</span><span>${formatINR(totals.gst)}</span></div>
           <div class="summary-row"><span>Delivery</span><span>${totals.deliveryFee === 0 ? "FREE" : formatINR(totals.deliveryFee)}</span></div>
+          <div class="delivery-progress">${totals.deliveryFee === 0 ? "Free Delivery" : `Add ${formatINR(999 - Math.max(0, totals.subtotal - totals.discount - totals.couponDiscount))} more for FREE delivery`}</div>
+          <form id="couponForm" class="coupon-form"><label for="couponCode">Coupon code</label><div><input id="couponCode" name="coupon" value="${totals.coupon}" placeholder="Try CARTNOVA10"><button class="btn btn-outline btn-sm" type="submit">${totals.coupon ? "Apply again" : "Apply"}</button></div>${totals.coupon ? `<button class="coupon-remove" type="button" id="removeCoupon">Remove coupon</button>` : ""}</form>
           <div class="summary-row total"><span>Total</span><span>${formatINR(totals.total)}</span></div>
           <a class="btn btn-primary btn-block" href="checkout.html" style="margin-top:1rem">Proceed to Checkout</a>
           <a class="btn btn-outline btn-block" href="products.html" style="margin-top:0.6rem">Continue Shopping</a>
         </aside>
-      </div>`;
+                </div><div id="savedForLaterItems"></div>`;
+    if (typeof Features !== "undefined") Features.renderSavedItems();
+    root.querySelector("#couponForm")?.addEventListener("submit", event => {
+      event.preventDefault();
+      const code = root.querySelector("#couponCode")?.value;
+      if (!Cart.applyCoupon(code)) { UI.toast("Invalid coupon code", "error"); return; }
+      UI.toast("Coupon applied", "success"); this.render();
+    });
+    root.querySelector("#removeCoupon")?.addEventListener("click", () => { Cart.clearCoupon(); UI.toast("Coupon removed", "info"); this.render(); });
 
     root.querySelectorAll("[data-inc]").forEach((btn) => {
       btn.onclick = () => {
         const id = btn.dataset.inc;
-        const item = Cart.getItems().find((i) => i.productId === Number(id));
+        const variants = JSON.parse(btn.dataset.cartVariant || "{}");
+        const item = Cart.getItems().find((i) => i.productId === Number(id) && JSON.stringify(i.variants||{})===JSON.stringify(variants));
         try {
-          Cart.updateQuantity(id, (item?.quantity || 1) + 1);
+          Cart.updateQuantity(id, (item?.quantity || 1) + 1, variants);
           this.render();
         } catch (err) {
           UI.toast(err.message, "error");
@@ -236,13 +252,14 @@ const CartPage = {
     root.querySelectorAll("[data-dec]").forEach((btn) => {
       btn.onclick = () => {
         const id = btn.dataset.dec;
-        const item = Cart.getItems().find((i) => i.productId === Number(id));
-        Cart.updateQuantity(id, (item?.quantity || 1) - 1);
+        const variants = JSON.parse(btn.dataset.cartVariant || "{}");
+        const item = Cart.getItems().find((i) => i.productId === Number(id) && JSON.stringify(i.variants||{})===JSON.stringify(variants));
+        Cart.updateQuantity(id, (item?.quantity || 1) - 1, variants);
         this.render();
       };
     });
 
-    root.querySelectorAll("[data-remove]").forEach((btn) => {
+      root.querySelectorAll("[data-remove]").forEach((btn) => {
       btn.onclick = async () => {
         const ok = await UI.confirm({
           title: "Remove item?",
@@ -251,10 +268,12 @@ const CartPage = {
           danger: true
         });
         if (!ok) return;
-        Cart.removeItem(btn.dataset.remove);
+        const variants = JSON.parse(btn.dataset.cartVariant || "{}");
+        Cart.removeItem(btn.dataset.remove, variants);
         UI.toast("Product removed from cart", "success");
         this.render();
       };
     });
+    UI.bindImageFallbacks(root);
   }
 };

@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CartNova — Shop Smart. Live Better.</title>
-  <meta name="description" content="CartNova is a modern online shopping platform. Shop electronics, fashion, home, books, beauty and sports." />
+  <title>CartNova | Shop Smart. Live Better.</title>
+  <meta name="description" content="Browse CartNova's curated electronics, fashion, home, book, beauty and sports catalog in a simple storefront." />
+  <meta property="og:title" content="CartNova | Shop Smart. Live Better." />
+  <meta property="og:description" content="Browse curated everyday essentials across electronics, fashion, home, books, beauty and sports." />
+  <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -18,7 +21,7 @@
     <div class="container hero-content">
       <div class="brand-eyebrow"><span class="logo-mark" style="width:28px;height:28px;font-size:0.75rem">CN</span> CartNova</div>
       <h1>Shop Smart. Live Better.</h1>
-      <p>Discover curated essentials across electronics, fashion, home, books, beauty, and sports — with secure checkout and student-friendly prices.</p>
+      <p>Discover curated essentials across electronics, fashion, home, books, beauty, and sports with straightforward shopping and clear prices.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="products.html">Shop Now</a>
         <a class="btn btn-outline" href="products.html?sort=rating">Explore Top Rated</a>
@@ -50,6 +53,13 @@
     </div>
   </section>
 
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Recently viewed</h2>
+      <div class="product-grid" id="recentlyViewedGrid"></div>
+    </div>
+  </section>
+
   <section class="section section-alt">
     <div class="container">
       <h2 class="section-title">Special Offers</h2>
@@ -64,7 +74,7 @@
         <article class="feature-card" style="background:linear-gradient(160deg,#5b21b6,#7c3aed)">
           <span class="offer-badge">FREE DELIVERY</span>
           <h3>Orders above ₹999</h3>
-          <p>No delivery fee on eligible carts. Fast dispatch across major cities.</p>
+          <p>Free standard delivery applies at the listed cart threshold. Estimates are illustrative.</p>
           <a class="btn btn-outline" href="products.html" style="margin-top:1rem;border-color:#fff;color:#fff">Browse Deals</a>
         </article>
         <article class="feature-card" style="background:linear-gradient(160deg,#0f766e,#14b8a6)">
@@ -90,23 +100,23 @@
       <div class="why-grid">
         <article class="why-card">
           <div class="why-icon">🔒</div>
-          <h3>Secure Payment</h3>
-          <p>Protected checkout flows with no card storage in this demo storefront.</p>
+          <h3>Payment Privacy</h3>
+          <p>Checkout does not collect card details. Digital payment choices are simulated.</p>
         </article>
         <article class="why-card">
           <div class="why-icon">⚡</div>
-          <h3>Fast Delivery</h3>
-          <p>Reliable dispatch windows so your essentials arrive when you need them.</p>
+          <h3>Delivery Estimates</h3>
+          <p>Compare standard and express estimates at checkout. No carrier is connected.</p>
         </article>
         <article class="why-card">
           <div class="why-icon">↺</div>
-          <h3>Easy Returns</h3>
-          <p>Hassle-free returns policy designed around customer confidence.</p>
+          <h3>Order Returns</h3>
+          <p>Eligible delivered orders can record a local return request.</p>
         </article>
         <article class="why-card">
           <div class="why-icon">💬</div>
-          <h3>24/7 Support</h3>
-          <p>Friendly help whenever you need product guidance or order support.</p>
+          <h3>Helpful Guidance</h3>
+          <p>Find shipping, returns, and order information in the Help Center.</p>
         </article>
       </div>
     </div>
@@ -127,8 +137,8 @@
           <h2>Stay in the loop</h2>
           <p>Get deal drops, new arrivals, and CartNova updates in your inbox.</p>
         </div>
-        <form class="newsletter-form" id="newsletterForm">
-          <input id="newsletterEmail" type="email" placeholder="Enter your email" required />
+        <form class="newsletter-form" id="newsletterForm" data-newsletter-form>
+          <label class="sr-only" for="newsletterEmail">Email address</label><input id="newsletterEmail" name="email" type="email" placeholder="Enter your email" autocomplete="email" required />
           <button class="btn btn-secondary" type="submit">Subscribe</button>
         </form>
       </div>
@@ -142,6 +152,7 @@
   <script src="js/auth.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/features.js"></script>
   <script src="js/products.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {

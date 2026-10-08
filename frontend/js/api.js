@@ -1,6 +1,6 @@
 /**
  * Central API helper.
- * Phase 1: localStorage-backed mock APIs.
+ * Local-only browser data helpers.
  * Phase 2+: swap BASE_URL to Spring Boot (http://localhost:8080).
  */
 const API = {
@@ -18,7 +18,7 @@ const API = {
 
   async request(path, options = {}) {
     if (this.USE_MOCK) {
-      throw new Error("Mock mode: use domain modules instead of live API.");
+      throw new Error("Local-only mode: use the storefront modules instead of a server API.");
     }
 
     const headers = {

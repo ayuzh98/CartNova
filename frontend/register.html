@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register — CartNova</title>
+  <title>CartNova | Create an Account</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/responsive.css" />
-</head>
+<meta name="description" content="Create a CartNova account to save your profile, wishlist, addresses, and orders."><meta property="og:title" content="CartNova | Create an Account"><meta property="og:description" content="Create a CartNova account to save your profile, wishlist, addresses, and orders."><meta property="og:type" content="website"><meta name="robots" content="noindex, nofollow"></head>
 <body>
   <div data-navbar></div>
 
@@ -17,30 +17,30 @@
     <div class="auth-card">
       <h1>Create your account</h1>
       <p>Join CartNova and start shopping smarter.</p>
-      <form id="registerForm" novalidate>
+      <form id="registerForm">
         <div class="form-group">
           <label for="name">Full Name</label>
-          <input id="name" type="text" placeholder="Your name" required />
+          <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" required />
           <div class="form-error">Name is required</div>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" type="email" placeholder="you@example.com" required />
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
           <div class="form-error">Valid email is required</div>
         </div>
         <div class="form-group">
           <label for="phone">Phone</label>
-          <input id="phone" type="tel" placeholder="10-digit phone" required />
+          <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="10-digit phone" required />
           <div class="form-error">Phone is required</div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input id="password" type="password" minlength="6" placeholder="Min 6 characters" required />
-          <div class="form-error">Password must be at least 6 characters</div>
+          <input id="password" name="password" type="password" minlength="8" autocomplete="new-password" placeholder="Min 8 characters" required />
+          <div class="form-error">Password must be at least 8 characters</div>
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirm Password</label>
-          <input id="confirmPassword" type="password" minlength="6" required />
+          <input id="confirmPassword" name="confirmPassword" type="password" minlength="8" autocomplete="new-password" required />
           <div class="form-error">Passwords must match</div>
         </div>
         <button class="btn btn-primary btn-block" type="submit">Create Account</button>
@@ -58,6 +58,7 @@
   <script src="js/auth.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/features.js"></script>
   <script src="js/profile.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {

@@ -1,5 +1,5 @@
 /**
- * Orders list & cancellation (Phase 1 mock).
+ * Legacy locally stored order helpers.
  */
 const OrdersPage = {
   cancellable: ["PLACED", "CONFIRMED"],

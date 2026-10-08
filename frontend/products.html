@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Products — CartNova</title>
+  <title>CartNova | Products</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/responsive.css" />
-</head>
+<meta name="description" content="Browse and filter CartNova products by category, price, popularity, and rating."><meta property="og:title" content="CartNova | Products"><meta property="og:description" content="Browse and filter CartNova products by category, price, popularity, and rating."><meta property="og:type" content="website"></head>
 <body>
   <div data-navbar></div>
 
@@ -23,16 +23,18 @@
     </div>
 
     <div class="products-layout">
-      <aside class="filters" id="categories">
-        <h3>Filters</h3>
+      <aside class="filters" id="categories" aria-label="Product filters">
+        <div class="filter-heading"><h3>Filters</h3><button type="button" class="filter-close" id="closeFilters" aria-label="Close filters">×</button></div>
         <div class="filter-group">
           <strong>Category</strong>
-          <div id="categoryFilters" style="margin-top:0.7rem"></div>
+          <div id="categoryFilters" class="category-filter-list" style="margin-top:0.7rem"></div>
         </div>
         <div class="filter-group">
           <strong>Price Range (₹)</strong>
           <div class="form-row" style="margin-top:0.7rem">
+            <label class="sr-only" for="minPrice">Minimum price in rupees</label>
             <input id="minPrice" type="number" min="0" placeholder="Min" />
+            <label class="sr-only" for="maxPrice">Maximum price in rupees</label>
             <input id="maxPrice" type="number" min="0" placeholder="Max" />
           </div>
         </div>
@@ -47,10 +49,11 @@
         <button class="btn btn-primary btn-block" id="applyFilters">Apply Filters</button>
         <button class="btn btn-ghost btn-block" id="clearFilters" style="margin-top:0.5rem">Clear</button>
       </aside>
+      <div class="filter-backdrop" id="filterBackdrop" hidden></div>
 
       <section>
         <div class="toolbar">
-          <div id="productCount">Loading products...</div>
+          <div class="toolbar-start"><button type="button" class="btn btn-outline mobile-filter-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="categories">Filters</button><div id="productCount" aria-live="polite">Loading products...</div></div>
           <label>
             Sort by
             <select id="sortSelect">
@@ -58,9 +61,11 @@
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
               <option value="rating">Rating</option>
+              <option value="popular">Popularity</option>
             </select>
           </label>
         </div>
+        <div class="active-filter-chips" id="activeFilterChips" aria-live="polite"></div>
         <div class="product-grid" id="productGrid"></div>
         <div class="pagination" id="pagination"></div>
       </section>
@@ -74,6 +79,7 @@
   <script src="js/auth.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/features.js"></script>
   <script src="js/products.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {

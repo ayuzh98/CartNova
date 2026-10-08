@@ -1,5 +1,5 @@
 /**
- * Admin dashboard UI (Phase 1 mock data + localStorage orders/users).
+ * Admin dashboard for locally stored catalog and order data.
  */
 const Admin = {
   initShell(active = "dashboard") {
@@ -18,11 +18,10 @@ const Admin = {
           <a href="orders.html" class="${active === "orders" ? "active" : ""}">Orders</a>
           <a href="users.html" class="${active === "users" ? "active" : ""}">Users</a>
           <a href="../index.html">View Store</a>
-          <a href="#" id="adminLogout">Logout</a>
+          <button type="button" id="adminLogout">Logout</button>
         </nav>
       `;
       document.getElementById("adminLogout").onclick = (e) => {
-        e.preventDefault();
         Auth.logout(true);
       };
     }
@@ -32,7 +31,9 @@ const Admin = {
   getAllOrders() {
     const users = Auth.getUsers();
     return users.flatMap((u) => {
-      const orders = JSON.parse(localStorage.getItem(`cartnova_orders_${u.id}`) || "[]");
+      let orders = [];
+      try { const stored = JSON.parse(localStorage.getItem(`cartnova_orders_${u.id}`) || "[]"); orders = Array.isArray(stored) ? stored : []; }
+      catch (_) { UI.toast("Some locally saved order data could not be read.", "warning"); }
       return orders.map((o) => ({ ...o, customerName: u.name, customerEmail: u.email }));
     });
   },
@@ -62,8 +63,8 @@ const Admin = {
         .map(
           (p) => `
           <tr>
-            <td><img class="thumb" src="${p.image}" alt="" /></td>
-            <td>${p.name}</td>
+            <td><img class="thumb" src="${UI.escapeHTML(p.image)}" alt="" width="64" height="64" loading="lazy" /></td>
+            <td>${UI.escapeHTML(p.name)}</td>
             <td>${p.stock}</td>
             <td>${formatINR(getFinalPrice(p))}</td>
           </tr>`
@@ -87,9 +88,9 @@ const Admin = {
         .map(
           (p) => `
           <tr>
-            <td><img class="thumb" src="${p.image}" alt="" /></td>
-            <td>${p.name}</td>
-            <td>${getCategoryById(p.categoryId)?.name || "-"}</td>
+            <td><img class="thumb" src="${UI.escapeHTML(p.image)}" alt="" width="64" height="64" loading="lazy" /></td>
+            <td>${UI.escapeHTML(p.name)}</td>
+            <td>${UI.escapeHTML(getCategoryById(p.categoryId)?.name || "-")}</td>
             <td>${formatINR(getFinalPrice(p))}</td>
             <td>${p.stock}</td>
             <td>
@@ -110,7 +111,7 @@ const Admin = {
           if (stock === null) return;
           const next = list.map((p) => (p.id === id ? { ...p, stock: Number(stock) } : p));
           localStorage.setItem("cartnova_admin_products", JSON.stringify(next));
-          // Also sync into in-memory sample data for this session
+          // Also sync into in-memory catalog data for this session
           const idx = CartNovaData.products.findIndex((p) => p.id === id);
           if (idx >= 0) CartNovaData.products[idx].stock = Number(stock);
           UI.toast("Product updated", "success");
@@ -122,7 +123,7 @@ const Admin = {
         btn.onclick = async () => {
           const ok = await UI.confirm({
             title: "Delete product?",
-            message: "This removes the product from the Phase 1 demo catalog.",
+            message: "This removes the product from the local catalog.",
             confirmText: "Delete",
             danger: true
           });
@@ -146,6 +147,7 @@ const Admin = {
       const name = prompt("Product name:");
       if (!name) return;
       const price = Number(prompt("Price (INR):", "999") || 0);
+      if (!Number.isFinite(price) || price <= 0) { UI.toast("Enter a valid price greater than zero.", "error"); return; }
       const list = JSON.parse(localStorage.getItem("cartnova_admin_products") || "[]");
       const product = {
         id: Date.now(),
@@ -156,7 +158,7 @@ const Admin = {
         rating: 4.2,
         stock: 25,
         image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
-        description: "Admin-created product for CartNova demo.",
+        description: "Product added through the local catalog editor.",
         featured: false,
         trending: false,
         createdAt: new Date().toISOString().slice(0, 10)
@@ -179,7 +181,7 @@ const Admin = {
     const render = () => {
       const orders = this.getAllOrders().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       if (!orders.length) {
-        body.innerHTML = `<tr><td colspan="6">No orders yet. Place a demo order from the storefront.</td></tr>`;
+        body.innerHTML = `<tr><td colspan="6">No orders yet. Orders placed from the storefront will appear here.</td></tr>`;
         return;
       }
 
@@ -187,12 +189,12 @@ const Admin = {
         .map(
           (o) => `
           <tr>
-            <td>${o.id}</td>
-            <td>${o.customerName}<br/><small style="color:var(--muted)">${o.customerEmail}</small></td>
+            <td>${UI.escapeHTML(o.id)}</td>
+            <td>${UI.escapeHTML(o.customerName)}<br/><small style="color:var(--muted)">${UI.escapeHTML(o.customerEmail)}</small></td>
             <td>${formatINR(o.totalAmount)}</td>
             <td>${o.paymentStatus}</td>
             <td>
-              <select data-status-order="${o.id}" data-user="${o.userId}">
+              <select data-status-order="${UI.escapeHTML(o.id)}" data-user="${UI.escapeHTML(o.userId)}">
                 ${statuses.map((s) => `<option value="${s}" ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}
               </select>
             </td>

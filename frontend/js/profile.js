@@ -32,10 +32,10 @@ const ProfilePage = {
     root.innerHTML = `
       <div class="profile-layout">
         <aside class="panel profile-nav">
-          <a href="#" class="active" data-profile-tab="details">Profile Details</a>
-          <a href="#" data-profile-tab="password">Change Password</a>
-          <a href="#" data-profile-tab="orders">Order History</a>
-          <a href="#" id="logoutBtn">Logout</a>
+          <button type="button" class="active" data-profile-tab="details">Profile Details</button>
+          <button type="button" data-profile-tab="password">Change Password</button>
+          <button type="button" data-profile-tab="orders">Order History</button>
+          <button type="button" id="logoutBtn">Logout</button>
         </aside>
         <div>
           <section class="panel" data-tab-panel="details">
@@ -229,8 +229,8 @@ const AuthPages = {
       }
       confirmGroup.classList.remove("invalid");
 
-      if (password.length < 6) {
-        UI.toast("Password must be at least 6 characters", "error");
+      if (password.length < 8) {
+        UI.toast("Password must be at least 8 characters", "error");
         return;
       }
 

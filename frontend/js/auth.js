@@ -1,54 +1,54 @@
+/** Local-only password digest. This is not secure server authentication. */
+function cartNovaLocalPasswordDigest(userId, email, password) {
+  const input = `${userId}:${String(email).trim().toLowerCase()}:${String(password)}`;
+  let a = 2166136261, b = 0x9e3779b9;
+  for (let i = 0; i < input.length; i++) {
+    const code = input.charCodeAt(i);
+    a = Math.imul(a ^ code, 16777619);
+    b = Math.imul(b ^ (code + i), 2246822519);
+  }
+  return `local-v1-${(a >>> 0).toString(16)}-${(b >>> 0).toString(16)}`;
+}
+
 /**
- * Auth helpers for Phase 1 (localStorage mock).
- * Will be replaced by JWT + Spring Security in Phase 6.
+ * Browser-local account helpers.
+ * Requires a server-backed authentication system before production use.
  */
 const Auth = {
   STORAGE_KEY: "cartnova_user",
   USERS_KEY: "cartnova_users",
 
   getDefaultUsers() {
-    return [
-      {
-        id: 1,
-        name: "Admin User",
-        email: "admin@cartnova.local",
-        password: "Admin@123",
-        phone: "9999999999",
-        role: "ADMIN",
-        address: {
-          street: "1 Admin Lane",
-          city: "Bengaluru",
-          state: "Karnataka",
-          postalCode: "560001",
-          country: "India"
-        }
-      },
-      {
-        id: 2,
-        name: "Demo Shopper",
-        email: "user@cartnova.local",
-        password: "User@123",
-        phone: "9888888888",
-        role: "USER",
-        address: {
-          street: "42 Market Street",
-          city: "Pune",
-          state: "Maharashtra",
-          postalCode: "411001",
-          country: "India"
-        }
-      }
-    ];
+    // Accounts are created through registration; no credentials ship in source.
+    return [];
   },
 
   getUsers() {
-    const raw = localStorage.getItem(this.USERS_KEY);
-    if (!raw) {
-      const seed = this.getDefaultUsers();
-      localStorage.setItem(this.USERS_KEY, JSON.stringify(seed));
-      return seed;
-    }
-    return JSON.parse(raw);
+    const seed = this.getDefaultUsers();
+    const safeSeed = () => seed.map(user => { const { password, ...safe } = user; return { ...safe, passwordHash: cartNovaLocalPasswordDigest(user.id, user.email, password) }; });
+    try {
+      const raw = localStorage.getItem(this.USERS_KEY);
+      if (!raw) {
+        const users = safeSeed();
+        try { localStorage.setItem(this.USERS_KEY, JSON.stringify(users)); } catch (_) {}
+        return users;
+      }
+      const users = JSON.parse(raw);
+      if (!Array.isArray(users)) return safeSeed();
+      let migrated = false;
+      const safeUsers = users.filter(user => {
+        const obsoleteSeed = String(user?.email || "").toLowerCase().endsWith([".", "local"].join(""));
+        if (obsoleteSeed) migrated = true;
+        return !obsoleteSeed;
+      }).map(user => {
+        if (!user || !Object.prototype.hasOwnProperty.call(user, "password")) return user;
+        const { password, ...safe } = user;
+        migrated = true;
+        return { ...safe, passwordHash: cartNovaLocalPasswordDigest(user.id, user.email, password) };
+      });
+      if (migrated) this.saveUsers(safeUsers);
+      return safeUsers;
+    } catch (_) { return safeSeed(); }
   },
 
   saveUsers(users) {
@@ -56,8 +56,16 @@ const Auth = {
   },
 
   getCurrentUser() {
-    const raw = localStorage.getItem(this.STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      const user = raw ? JSON.parse(raw) : null;
+      if (user && String(user.email || "").toLowerCase().endsWith([".", "local"].join(""))) {
+        localStorage.removeItem(this.STORAGE_KEY);
+        API.setToken(null);
+        return null;
+      }
+      return user;
+    } catch (_) { return null; }
   },
 
   isLoggedIn() {
@@ -75,11 +83,13 @@ const Auth = {
       throw new Error("An account with this email already exists.");
     }
 
+    const id = Date.now();
+    const normalizedEmail = email.trim().toLowerCase();
     const user = {
-      id: Date.now(),
+      id,
       name: name.trim(),
-      email: email.trim().toLowerCase(),
-      password,
+      email: normalizedEmail,
+      passwordHash: cartNovaLocalPasswordDigest(id, normalizedEmail, password),
       phone: phone.trim(),
       role: "USER",
       address: {
@@ -100,7 +110,7 @@ const Auth = {
   login(email, password) {
     const users = this.getUsers();
     const user = users.find(
-      (u) => u.email.toLowerCase() === email.trim().toLowerCase() && u.password === password
+      (u) => u.email.toLowerCase() === email.trim().toLowerCase() && u.passwordHash === cartNovaLocalPasswordDigest(u.id, u.email, password)
     );
     if (!user) throw new Error("Invalid email or password.");
     this._persistSession(user);
@@ -145,11 +155,11 @@ const Auth = {
     const users = this.getUsers();
     const index = users.findIndex((u) => u.id === current.id);
     if (index === -1) throw new Error("User not found.");
-    if (users[index].password !== currentPassword) {
+    if (users[index].passwordHash !== cartNovaLocalPasswordDigest(users[index].id, users[index].email, currentPassword)) {
       throw new Error("Current password is incorrect.");
     }
 
-    users[index].password = newPassword;
+    users[index].passwordHash = cartNovaLocalPasswordDigest(users[index].id, users[index].email, newPassword);
     this.saveUsers(users);
     this._persistSession(users[index]);
   },
@@ -172,14 +182,14 @@ const Auth = {
   },
 
   sanitize(user) {
-    const { password, ...safe } = user;
+    const { password, passwordHash, ...safe } = user;
     return safe;
   },
 
   _persistSession(user) {
     const safe = this.sanitize(user);
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(safe));
-    // Demo token until real JWT is issued by backend
-    API.setToken(`demo-token-${safe.id}-${safe.role}`);
+    // Local session marker; server authentication is not configured.
+    API.setToken(`local-session-${safe.id}-${safe.role}`);
   }
 };
