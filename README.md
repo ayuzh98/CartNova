@@ -1,5 +1,5 @@
 <div align="center">
-
+  
 # 🛒 CARTNOVA
 
 <img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=900&size=60&duration=1800&pause=700&color=00E5FF&center=true&vCenter=true&width=1000&height=110&lines=%F0%9F%9B%92+CARTNOVA;CARTNOVA+%7C+E-COMMERCE;SHOP+SMART.+LIVE+BETTER." alt="CartNova Animation" />
